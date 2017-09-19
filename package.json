@@ -1,0 +1,19 @@
+{
+  "name": "sms-filter-updated",
+  "version": "2.0.0",
+  "main": "main.js",
+  "author": "Bryann Barbosa",
+  "scripts": {
+    "start": "electron .",
+    "watch-sass": "sass --watch app/styles/sass/main.scss:app/styles/app.css"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "^1.4.13"
+  },
+  "dependencies": {
+    "angular": "^1.6.6",
+    "exceljs": "^0.6.0",
+    "photonkit": "^0.1.2"
+  }
+}
