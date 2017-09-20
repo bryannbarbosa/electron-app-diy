@@ -8,10 +8,7 @@ const Excel = require('exceljs');
 const dialog = electron.dialog;
 const fs = require('fs');
 
-
-
 let mainWindow = null;
-
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
@@ -34,17 +31,16 @@ ipcMain.on('runFile', (event, args) => {
         workbook = new Excel.Workbook();
         workbook.xlsx.readFile(fileNames[0])
         .then(function() {
-            let worksheet = workbook.getWorksheet(1);
-    
-            let arr = [70, 77, 78, 79];
-
-            for(let i = 0; i < 50; i++) {
-              arr.push(i);
-            }
-
             event.sender.send('getFormData');
-
             ipcMain.on('sendFormData', (event, args) => {
+              let worksheet = workbook.getWorksheet(1);
+    
+              let arr = [70, 77, 78, 79];
+
+              for(let i = 10; i < 50; i++) {
+                arr.push(i);
+              }
+
               let ddi = args.ddi;
               let ddd = args.ddd;
 
@@ -89,7 +85,7 @@ ipcMain.on('runFile', (event, args) => {
 
             let arr_exclude = [];
 
-            for(let i = 0; i < 50; i++) {
+            for(let i = 10; i < 50; i++) {
               arr_exclude.push(i);
             }
     
@@ -97,6 +93,7 @@ ipcMain.on('runFile', (event, args) => {
               let row = worksheet.getRow(i);
               let value = row.getCell(1).value.toString();
               let length = row.getCell(1).value.toString().length;
+
               
               if(length <= 7) {
                 worksheet.spliceRows(i, 1);
@@ -106,13 +103,14 @@ ipcMain.on('runFile', (event, args) => {
                 worksheet.spliceRows(i, 1);
               }
             }
-
-            dialog.showSaveDialog({filters: [
+          });
+          let worksheet = workbook.getWorksheet(1);
+          dialog.showSaveDialog({filters: [
                 {name: 'Planilhas do Excel', extensions: ['*']}]},(fileName) => {
                 if (fileName === undefined) return;
                 dialog.showMessageBox({ message: "Planilha filtrada e salva com sucesso!",buttons: ["OK"] });
                 return workbook.xlsx.writeFile(fileName+ '_quant' + '_' +  worksheet.rowCount + '.xlsx');
-            });
+                
           });
        })
    });

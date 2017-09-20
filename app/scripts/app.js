@@ -8,7 +8,7 @@ document.getElementById('startProcess').addEventListener('click', () => {
             ddi: document.getElementById('ddi').value.toString(),
             ddd: document.getElementById('ddd').value.toString()
         };
-        event.sender.sendSync('sendFormData', data);
+        event.sender.send('sendFormData', data);
     });
 });
 
