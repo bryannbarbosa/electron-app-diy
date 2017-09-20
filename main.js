@@ -95,12 +95,8 @@ ipcMain.on('runFile', (event, args) => {
                 worksheet.spliceRows(i, 1);
               }
 
-              if(length == 13) {
-                console.log(value);
-                console.log(arr_exclude.indexOf(Number(value.substr(4,2))));
-                //if(arr_exclude.indexOf(Number(value.substr(4,2)) > -1)) {
-                  //worksheet.spliceRows(i, 1);
-                //}
+              if(length == 13 && arr_exclude.indexOf(Number(value.substr(5,2)) > -1)) {
+                worksheet.spliceRows(i, 1);
               }
             }
           });

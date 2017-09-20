@@ -7,7 +7,7 @@
     "start": "electron .",
     "watch-sass": "sass --watch app/styles/sass/main.scss:app/styles/app.css"
   },
-  "license": "GPL",
+  "license": "UNLICENSED",
   "devDependencies": {
     "electron-prebuilt": "^1.4.13"
   },
