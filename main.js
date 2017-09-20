@@ -37,10 +37,6 @@ ipcMain.on('runFile', (event, args) => {
     
               let arr = [70, 77, 78, 79];
 
-              for(let i = 10; i < 50; i++) {
-                arr.push(i);
-              }
-
               let ddi = args.ddi;
               let ddd = args.ddd;
 
@@ -99,8 +95,12 @@ ipcMain.on('runFile', (event, args) => {
                 worksheet.spliceRows(i, 1);
               }
 
-              if(length == 12 && arr_exclude.indexOf(Number(value.substr(4,2))) > -1) {
-                worksheet.spliceRows(i, 1);
+              if(length == 13) {
+                console.log(value);
+                console.log(arr_exclude.indexOf(Number(value.substr(4,2))));
+                //if(arr_exclude.indexOf(Number(value.substr(4,2)) > -1)) {
+                  //worksheet.spliceRows(i, 1);
+                //}
               }
             }
           });
