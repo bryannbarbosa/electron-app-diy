@@ -4,11 +4,13 @@
   "main": "main.js",
   "author": "Bryann Barbosa",
   "scripts": {
+    "build": "electron-packager . --overwrite --asar --platform=win32 --arch=x64 --prune --out=dist --ignore='^/dist$' --version-string.CompanyName=MACIV --version-string.FileDescription=MACIV --version-string.ProductName='SMS Database Filter'",
     "start": "electron .",
     "watch-sass": "sass --watch app/styles/sass/main.scss:app/styles/app.css"
   },
   "license": "UNLICENSED",
   "devDependencies": {
+    "electron-packager": "^9.1.0",
     "electron-prebuilt": "^1.4.13"
   },
   "dependencies": {
