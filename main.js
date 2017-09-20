@@ -4,7 +4,6 @@ const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
 const Excel = require('exceljs');
-const workbook = new Excel.Workbook();
 
 const dialog = electron.dialog;
 const fs = require('fs');
@@ -24,7 +23,7 @@ app.on('ready', () => {
     
 });
 
-ipcMain.on('runFile', () => {
+ipcMain.on('runFile', (event, args) => {
     dialog.showOpenDialog({filters: [
         {name: 'Planilhas do Excel', extensions: ['xlsx']}
       ]},(fileNames) => {
@@ -32,20 +31,24 @@ ipcMain.on('runFile', () => {
             console.log('Nenhum arquivo executado');
             return;
         }
-        
+        workbook = new Excel.Workbook();
         workbook.xlsx.readFile(fileNames[0])
-        .then(() => {
+        .then(function() {
             let worksheet = workbook.getWorksheet(1);
     
             let arr = [70, 77, 78, 79];
 
-            for(let i = 10; i < 50; i++) {
+            for(let i = 0; i < 50; i++) {
               arr.push(i);
             }
-            let ddi = document.getElementById('ddi').value.toString();
-            let ddd = document.getElementById('ddd').value.toString();
-            
-            for(let i = 1; i <= worksheet.rowCount; i++) {
+
+            event.sender.send('getFormData');
+
+            ipcMain.on('sendFormData', (event, args) => {
+              let ddi = args.ddi;
+              let ddd = args.ddd;
+
+              for(let i = 1; i <= worksheet.rowCount; i++) {
               let row = worksheet.getRow(i);
               let value = row.getCell(1).value.toString();
               value = value.trim();
@@ -110,8 +113,9 @@ ipcMain.on('runFile', () => {
                 dialog.showMessageBox({ message: "Planilha filtrada e salva com sucesso!",buttons: ["OK"] });
                 return workbook.xlsx.writeFile(fileName+ '_quant' + '_' +  worksheet.rowCount + '.xlsx');
             });
-        })
-    });
+          });
+       })
+   });
 });
 
 
