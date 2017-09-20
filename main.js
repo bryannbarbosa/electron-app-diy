@@ -79,23 +79,26 @@ ipcMain.on('runFile', (event, args) => {
               row.commit();
             }
 
-            let arr_exclude = [];
-
-            for(let i = 10; i < 50; i++) {
-              arr_exclude.push(i);
-            }
+            let arr_exclude = [30];
     
             for(let i = 1; i <= worksheet.rowCount; i++) {
               let row = worksheet.getRow(i);
               let value = row.getCell(1).value.toString();
               let length = row.getCell(1).value.toString().length;
 
+              //if(length == 13 && arr_exclude.indexOf(Number(value.substr(5,2)) > -1)) {
+                //console.log(value + ' ' + arr_exclude.indexOf(Number(value.substr(5, 2))));
+               // worksheet.spliceRows(i, 1);
+              //}
               
-              if(length <= 7) {
-                worksheet.spliceRows(i, 1);
-              }
+            }
 
-              if(length == 13 && arr_exclude.indexOf(Number(value.substr(5,2)) > -1)) {
+            for(let i = 1; i <= worksheet.rowCount; i++) {
+              let row = worksheet.getRow(i);
+              let value = row.getCell(1).value.toString();
+              let length = row.getCell(1).value.toString().length;
+
+              if(length <= 7) {
                 worksheet.spliceRows(i, 1);
               }
             }
