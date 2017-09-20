@@ -36,6 +36,11 @@ ipcMain.on('runFile', (event, args) => {
               let worksheet = workbook.getWorksheet(1);
     
               let arr = [70, 77, 78, 79];
+              let arr_fixo = [];
+
+              for(let i = 10; i < 50; i++) {
+                arr_fixo.push(i);
+              }
 
               let ddi = args.ddi;
               let ddd = args.ddd;
@@ -49,19 +54,29 @@ ipcMain.on('runFile', (event, args) => {
               row.getCell(1).value = value;
               row.commit();
               let length = row.getCell(1).value.toString().length;
+
+              if(length == 8 && arr_fixo.indexOf(Number(value.substr(0,2))) > -1) {
+                row.getCell(1).value = '0';
+              }
               
-              if(length == 8 && arr.indexOf(Number(value.substr(0,2))) > -1) {
+              else if(length == 8 && arr.indexOf(Number(value.substr(0,2))) > -1) {
                row.getCell(1).value = ddi + ddd + value;
               }
+              
               else if(length == 8 && !arr.indexOf(Number(value.substr(0,2))) > -1) {
                 row.getCell(1).value = ddi + ddd + '9' + value;
               }
+              
     
               if(length == 9) {
                row.getCell(1).value = ddi + ddd + value;
               }
+
+              if(length == 10 && arr_fixo.indexOf(Number(value.substr(2,2))) > -1) {
+                row.getCell(1).value = '0';
+              }
     
-              if(length == 10 && arr.indexOf(Number(value.substr(2,2))) > -1) {
+              else if(length == 10 && arr.indexOf(Number(value.substr(2,2))) > -1) {
                 row.getCell(1).value = ddi + value;
               }
     
@@ -69,42 +84,39 @@ ipcMain.on('runFile', (event, args) => {
                 let sub = value.substr(0,2) + '9' + value.substr(2);
                   row.getCell(1).value = ddi + sub.toString();
               }
+
               if(length == 11) {
                 row.getCell(1).value = ddi + row.getCell(1).value.toString();
               }
-              if(length == 12 && !arr.indexOf(Number(value.substr(2,2))) > -1) {
+
+              if(length == 12 && arr_fixo.indexOf(Number(value.substr(2,2))) > -1) {
+                row.getCell(1).value = '0';
+              }
+
+              else if(length == 12 && !arr.indexOf(Number(value.substr(2,2))) > -1) {
                 let sub = ddi + value.slice(0, -1).toString();
                 row.getCell(1).value = sub;
               }
+              
               row.commit();
             }
 
-            let arr_exclude = [];
-
-            for(let i = 10; i < 50; i++) {
-              arr_exclude.push(i);
-            }
-    
-            for(let i = 1; i <= worksheet.rowCount; i++) {
+            for(let i = 1; i < worksheet.rowCount; i++) {
               let row = worksheet.getRow(i);
               let value = row.getCell(1).value.toString();
               let length = row.getCell(1).value.toString().length;
-
               
               if(length <= 7) {
-                worksheet.spliceRows(i, 1);
-              }
-
-              if(length == 13 && arr_exclude.indexOf(Number(value.substr(5,2)) > -1)) {
+                console.log(value + ' ' + i);
                 worksheet.spliceRows(i, 1);
               }
             }
           });
           let worksheet = workbook.getWorksheet(1);
           dialog.showSaveDialog({filters: [
-                {name: 'Planilhas do Excel', extensions: ['*']}]},(fileName) => {
-                if (fileName === undefined) return;
-                dialog.showMessageBox({ message: "Planilha filtrada e salva com sucesso!",buttons: ["OK"] });
+          {name: 'Planilhas do Excel', extensions: ['*']}]},(fileName) => {
+            if (fileName === undefined) return;
+              dialog.showMessageBox({ message: "Planilha filtrada e salva com sucesso!",buttons: ["OK"] });
                 return workbook.xlsx.writeFile(fileName+ '_quant' + '_' +  worksheet.rowCount + '.xlsx');
                 
           });
